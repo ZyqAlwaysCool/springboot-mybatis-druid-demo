@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyq.mapper.EmployeeMapper">
+    <!--结果集映射-->
+    <resultMap id="empDep" type="Employee">
+        <result property="empId" column="empId"/>
+        <result property="empName" column="empName"/>
+        <result property="empBirth" column="empBirth"/>
+        <!--Java类型映射-->
+        <association property="empDepartment" javaType="Department">
+            <result property="depId" column="depId"/>
+            <result property="depName" column="depName"/>
+        </association>
+    </resultMap>
+
+    <select id="queryAllEmp" resultMap="empDep">
+       select e.empId , e.empName, e.empBirth, d.depId, d.depName
+       from employee e, department d
+       where e.empDepartment = d.depName;
+    </select>
+    <insert id="addEmp" parameterType="map">
+        insert into `employee`(empId, empName, empBirth, empDepartment)
+        values(#{empId}, #{empName}, #{empBirth}, #{empDepartment})
+    </insert>
+    <select id="queryEmpById" resultMap="empDep">
+       select e.empId , e.empName, e.empBirth, d.depId, d.depName
+       from employee e, department d
+       where e.empId = #{empId} and e.empDepartment = d.depName;
+    </select>
+    <delete id="deleteEmpById">
+        delete from `employee` where empId = #{empId}
+    </delete>
+    <update id="updateEmpById" parameterType="map">
+        update `employee`
+        set empName=#{empName}, empBirth=#{empBirth}, empDepartment=#{empDepartment}
+        where empId = #{empId};
+    </update>
+</mapper>

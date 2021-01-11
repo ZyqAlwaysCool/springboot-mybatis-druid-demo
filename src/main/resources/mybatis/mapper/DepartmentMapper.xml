@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zyq.mapper.DepartmentMapper">
+    <select id="queryAllDep" resultType="Department">
+        select * from `department`
+    </select>
+    <insert id="addDep" parameterType="Department">
+        insert into `department`(depId, depName)
+        values(#{depId}, #{depName})
+    </insert>
+    <select id="queryDepById" resultType="Department">
+        select * from `department`
+        where depId = #{depId}
+    </select>
+    <delete id="deleteDepById">
+        delete from `department` where depId = #{depId}
+    </delete>
+    <update id="updateDepById" parameterType="Department">
+        update `department`
+        set depName = #{depName}
+        where depId = #{depId};
+    </update>
+</mapper>
