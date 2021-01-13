@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zyq.mapper.EmployeeMapper;
 import com.zyq.pojo.Employee;
 import com.zyq.utils.JsonUtils;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ public class EmployeeController{
     @Autowired
     private EmployeeMapper employeeMapper;
 
+    @ApiOperation("查询所有员工")
     @GetMapping("/all")
     public String queryAllEmp() throws JsonProcessingException {
         List<Employee> employees = employeeMapper.queryAllEmp();

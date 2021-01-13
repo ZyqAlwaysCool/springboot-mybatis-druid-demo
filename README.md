@@ -170,3 +170,61 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
    # !!!注意点: 1.1.10版本之后默认为false, 需要手动开启, 否则会报404错误
    spring.datasource.druid.stat-view-servlet.enabled=true
    ```
+### 集成Swagger接口文档
+* [在 Spring Boot 项目中使用 Swagger 文档](https://developer.ibm.com/zh/articles/j-using-swagger-in-a-spring-boot-project/)
+* 依赖包
+```xml
+<!--swagger-->
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>3.0.0</version>
+</dependency>
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger-ui</artifactId>
+    <version>2.9.2</version>
+</dependency>
+```
+>为什么swagger-ui使用2.9.2版本:
+>2.9.2和当前最新的3.0.0下的包资源路径不一致，需要向资源处理器中添加路径
+* 默认访问路径:`http://ip:port/swagger-ui.html#/`
+* 添加SwaggerConfig配置类
+```java
+@Configuration
+@EnableSwagger2 //开启Swagger2
+public class SwaggerConfig{
+    //配置Swagger的实例Docket
+    @Bean
+    public Docket getDocket(){
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(myApiInfo())
+                .select()
+                /**
+                 * RequestHandlerSelectors===>配置要扫描接口的方式
+                 *      basePackage===>指定要扫描的包
+                 *      any()===>扫描全部
+                 *      none()===>不扫描
+                 *      withClassAnnotation===>扫描类上的注解, 参数为注解反射对象
+                 *      withMethodAnnotation===>扫描方法上的注解
+                 */
+                .apis(RequestHandlerSelectors.basePackage("com.zyq.controller"))
+                //.path()路径过滤
+                .build();
+    }
+
+    private ApiInfo myApiInfo(){
+        Contact contact = new Contact("zyq", "https://github.com/ZyqAlwaysCool", "");
+        return new ApiInfo(
+                "Api Documentation",
+                "springboot-mybatis-druid-demo-doc",
+                "1.0",
+                "urn:tos",
+                contact,
+                "Apache 2.0",
+                "http://www.apache.org/licenses/LICENSE-2.0",
+                new ArrayList<>());
+    }
+}
+```
+
